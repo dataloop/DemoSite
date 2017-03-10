@@ -14,8 +14,6 @@
         <blc.menu.version>2.0.1-GA</blc.menu.version>
         <broadleaf-sample-payment-gateway.version>2.0.0-GA</broadleaf-sample-payment-gateway.version>
 
-        <!-- WARNING: HSQLDB version 2.3.3 does not work, 2.3.2 is verified to work with Broadleaf -->
-        <hsqldb.version>2.3.2</hsqldb.version>
         <spring.instrument.version>4.1.9.RELEASE</spring.instrument.version>
         <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
         <tomcat.conf.dir.name>tomcat-server-conf</tomcat.conf.dir.name>
@@ -199,12 +197,11 @@
                         <path>${path}</path>
                     </configuration>
                     <dependencies>
-                        <dependency>
-                            <groupId>org.hsqldb</groupId>
-                            <artifactId>hsqldb</artifactId>
-                            <version>${hsqldb.version}</version>
-                            <type>jar</type>
-                        </dependency>
+			<dependency>
+			    <groupId>mysql</groupId>
+			    <artifactId>mysql-connector-java</artifactId>
+			    <version>5.1.26</version>
+			</dependency>
                         <dependency>
                             <groupId>org.apache.tomcat</groupId>
                             <artifactId>tomcat-jdbc</artifactId>
@@ -225,40 +222,6 @@
                     <version>1.8</version>
                     <executions>
                         <execution>
-                            <id>hsqldb-start</id>
-                            <configuration>
-                                <target>
-                                    <echo message="Starting HSQL Database..." />
-                                    <java fork="true" spawn="true" classname="org.hsqldb.Server" classpathref="maven.plugin.classpath">
-                                        <arg  line="-database.0 file:${basedir}/../data/broadleaf -dbname.0 broadleaf"/>
-                                    </java>
-                                    <echo message="Database started succcessfully" />
-                                </target>
-                            </configuration>
-                            <goals>
-                                <goal>run</goal>
-                            </goals>
-                        </execution>
-                        <execution>
-                            <id>hsqldb-stop</id>
-                            <configuration>
-                                <target>
-                                    <echo message="Stopping HSQL database..." />
-                                    <sql
-                                        autocommit="true"
-                                        print="true"
-                                        classpathref="maven.plugin.classpath"
-                                        driver="org.hsqldb.jdbcDriver"
-                                        url="jdbc:hsqldb:hsql://localhost/broadleaf;ifexists=true"
-                                        userid="sa"
-                                        password="">
-                                        <transaction>SHUTDOWN</transaction>
-                                    </sql>
-                                    <echo message="Database stopped successfully" />
-                                </target>
-                            </configuration>
-                        </execution>
-                        <execution>
                             <id>change-identifier</id>
                             <configuration>
                                 <target>
@@ -268,11 +231,6 @@
                         </execution>
                     </executions>
                     <dependencies>
-                        <dependency>
-                            <groupId>org.hsqldb</groupId>
-                            <artifactId>hsqldb</artifactId>
-                            <version>${hsqldb.version}</version>
-                        </dependency>
                     </dependencies>
                 </plugin>
 
